@@ -66,12 +66,19 @@ function css(className, url, properties) {
     '  background-image: url(' + url + ');',
     '}',
     '',
-    '@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {',
+    '@media',
+    '  only screen and (-webkit-min-device-pixel-ratio: 1.3),',
+    '  only screen and (   min--moz-device-pixel-ratio: 1.3),',
+    '  only screen and (     -o-min-device-pixel-ratio: (1.3 / 1) ),',
+    '  only screen and (        min-device-pixel-ratio: 1.3),',
+    '  only screen and (                min-resolution: round((1.3 * 96))dpi),',
+    '  only screen and (                min-resolution: (1.3 * 1)dppx) {',
     '  .' + className + ' {',
     '    background-image: url(' + retina(url) + ');',
     '    background-size: ' + properties.width + 'px ' + properties.height + 'px;',
     '  }',
-    '}'
+    '}',
+    ''
   ].join('\n');
 }
 
