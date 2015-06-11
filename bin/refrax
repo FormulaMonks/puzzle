@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+
+var refrax = require('..');
+
+var src = process.argv[2];
+var dest = process.argv[3];
+
+if ('-h' === src || '--help' === src) {
+  return help();
+}
+
+if ('-v' === src || '--version' === src) {
+  return console.log(require('../package').version);
+}
+
+if (!src) {
+  console.error('error: source directory not specified');
+  return help();
+}
+
+if (!dest) {
+  console.error('error: destination directory not specified');
+  return help();
+}
+
+refrax(src, dest, function(err) {
+  if (err) throw err;
+  console.log('all done, no errors');
+});
+
+function help() {
+  console.log('');
+  console.log('refrax <src> <dest>');
+  console.log('');
+  console.log('  src   Source directory with assets.yml');
+  console.log('  dest  Destination directory where files will be placed');
+}

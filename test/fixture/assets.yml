@@ -1,0 +1,25 @@
+sprite home/foo.jpg home/:
+  lamb.jpg: 200x200
+  ostriches.jpg: 50x50
+  snowy-owl.jpg: 20x20
+
+sprite home/grid.png home/ 50x50:
+  - lamb.jpg
+  - ostriches.jpg
+  - snowy-owl.jpg
+
+image home/background home/lamb.jpg: 1200x700 png
+
+image home/banner.jpg home/lamb.jpg: 600x200
+
+image home/logo home/snowy-owl.jpg:
+  big: 300x100 jpg
+  small: 100x33 png
+
+sprite icon svg/ 24x24:
+  - compass.svg
+  - home.svg
+  - mail.svg
+
+icon font svg/ 24px:
+  mail: email
