@@ -1,6 +1,6 @@
 {
   "name": "refrax",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple assets compiler",
   "main": "index.js",
   "bin": {
