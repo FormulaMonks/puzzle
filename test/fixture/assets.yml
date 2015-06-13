@@ -8,6 +8,21 @@ sprite home/grid.png home/ 50x50:
   - ostriches.jpg
   - snowy-owl.jpg
 
+sprite icon svg/ 24x24:
+  - compass.svg
+  - home.svg
+  - mail.svg
+
+sprite nav nav/ no-resize:
+  - profile.png
+  - search.png
+  - speaker.png
+
+sprite nav2x nav2x/ no-resize:
+  - profile.png
+  - search.png
+  - speaker.png
+
 image home/background home/lamb.jpg: 1200x700 png
 
 image home/banner.jpg home/lamb.jpg: 600x200
@@ -15,11 +30,6 @@ image home/banner.jpg home/lamb.jpg: 600x200
 image home/logo home/snowy-owl.jpg:
   big: 300x100 jpg
   small: 100x33 png
-
-sprite icon svg/ 24x24:
-  - compass.svg
-  - home.svg
-  - mail.svg
 
 icon font svg/ 24px:
   mail: email
