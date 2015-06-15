@@ -14,58 +14,53 @@ function sprites(dir, targets) {
     async.mapSeries(targets.sprite, function(target, fn) {
       console.log('  ', target.dest);
 
-      var filename = target.dest + '.' + target.format;
+      var style = [];
 
+      async.series({
+        regular: writeSprites(style, target, false),
+        retina: writeSprites(style, target, true),
+        css: writeCss(style, target)
+      }, fn);
+    }, fn);
+  };
+
+  function writeCss(style, target) {
+    return function(fn) {
+      write(join(dir, target.dest + '.css'), style.join('\n'), 'utf8');
+      fn();
+    };
+  }
+
+  function writeSprites(style, target, isRetina) {
+    return function(fn) {
       var options = {
-        src: target.files.map(function(s) { return join(dir, retina(s)) }),
-        engine: 'gmsmith',
+        src: target.files.map(function(s) { return join(dir, isRetina ? retina(s) : s) }),
+        padding: 2,
         exportOpts: {
           format: target.format
         }
       };
 
+      var filename = target.dest + '.' + target.format;
+      filename = isRetina ? retina(filename) : filename;
+
       spritesmith(options, function(err, res) {
         if (err) return fn(err);
 
-        write(join(dir, retina(filename)), res.image, 'binary');
+        write(join(dir, filename), res.image, 'binary');
 
-        var options = {
-          src: target.files.map(function(s) { return join(dir, s) }),
-          engine: 'gmsmith',
-          exportOpts: {
-            format: target.format
-          }
-        };
+        var rules = css(target.dest, filename, res, isRetina);
 
-        spritesmith(options, function(err, res) {
-          if (err) return fn(err);
+        style.push(isRetina ? media(rules) : rules);
 
-          write(join(dir, filename), res.image, 'binary');
-
-          var style = [
-            css(target.dest, filename, res.properties),
-            Object.keys(res.coordinates).map(function(name) {
-              var coords = res.coordinates[name];
-              var className = name.substr(name.lastIndexOf('/') + 1).split('.')[0];
-              return cssRule(className, coords);
-            }).join('\n')
-          ].join('\n');
-
-          write(join(dir, target.dest + '.css'), style, 'utf8');
-
-          fn();
-        });
+        fn();
       });
-    }, fn);
-  };
+    };
+  }
 }
 
-function css(className, url, properties) {
+function media(style) {
   return [
-    '.' + className + ' {',
-    '  background-image: url(' + url + ');',
-    '}',
-    '',
     '@media',
     '  only screen and (-webkit-min-device-pixel-ratio: 1.3),',
     '  only screen and (   min--moz-device-pixel-ratio: 1.3),',
@@ -73,21 +68,35 @@ function css(className, url, properties) {
     '  only screen and (        min-device-pixel-ratio: 1.3),',
     '  only screen and (                min-resolution: 124dpi),',
     '  only screen and (                min-resolution: 1.3dppx) {',
-    '  .' + className + ' {',
-    '    background-image: url(' + retina(url) + ');',
-    '    background-size: ' + properties.width + 'px ' + properties.height + 'px;',
-    '  }',
+    style,
     '}',
-    ''
   ].join('\n');
 }
 
-function cssRule(className, coords) {
+function css(className, url, res, isRetina) {
   return [
     '.' + className + ' {',
-    '  background-position: -' + coords.x + 'px -' + coords.y + 'px;',
-    '  width: ' + coords.width + 'px;',
-    '  height: ' + coords.height + 'px;',
+    '  background-image: url(' + url + ');',
+    '  background-size: '
+    + (res.properties.width / (isRetina ? 2 : 1)) + 'px '
+    + (res.properties.height / (isRetina ? 2 : 1)) + 'px;',
+    '}',
+    Object.keys(res.coordinates).map(function(name) {
+      var coords = res.coordinates[name];
+      var className = name.substr(name.lastIndexOf('/') + 1).split('.')[0].split('@')[0];
+      return cssRule(className, coords, isRetina);
+    }).join('\n')
+  ].join('\n');
+}
+
+function cssRule(className, coords, isRetina) {
+  return [
+    '.' + className + ' {',
+    '  background-position: -'
+    + (coords.x / (isRetina ? 2 : 1)) + 'px -'
+    + (coords.y / (isRetina ? 2 : 1)) + 'px;',
+    '  width: ' + (coords.width / (isRetina ? 2 : 1)) + 'px;',
+    '  height: ' + (coords.height / (isRetina ? 2 : 1)) + 'px;',
     '}'
   ].join('\n');
 }
