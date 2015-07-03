@@ -1,5 +1,5 @@
 
-# refrax
+# puzzle
 
 A simple assets compiler.
 
