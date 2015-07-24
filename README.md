@@ -5,6 +5,8 @@ A simple assets compiler.
 
 Takes high-dpi source images and vectors and compiles to Retina and low-dpi images, CSS sprites and icon fonts. It is designed to be *designer-friendly* and *developer-ready*.
 
+![Puzzle](http://cl.ly/c33a/puzzle_logo2.png)
+
 ## Usage
 
 #### Command line:
