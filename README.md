@@ -78,7 +78,7 @@ This library is provided under the MIT license. See [LICENSE](LICENSE) for appli
 
 ![Citrusbyte](http://i.imgur.com/W6eISI3.png)
 
-Refrax is lovingly maintained and funded by Citrusbyte.
+Puzzle is lovingly maintained and funded by Citrusbyte.
 At Citrusbyte, we specialize in solving difficult computer science problems for startups and the enterprise.
 
 At Citrusbyte we believe in and support open source software.
